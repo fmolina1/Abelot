@@ -121,13 +121,21 @@ inner join TipoFact AS TP ON C.IdTipoFact = TP.IdTipoFact
 
 
 /*Armar tabla Comprobantes de Siro según vencimientos*/
-SELECT c.NroCliente as 'Nro Cliente', DATE_FORMAT(f.FPVenc, "%d/%m/%Y") as '1º Vto', df.totalPago as '1º Monto', DATE_FORMAT(f.FSVenc, "%d/%m/%Y") as '2º Vto', df.totalPago2 as '2º Monto', DATE_FORMAT(f.FSVenc, "%d/%m/%Y") as '3º Vto', df.totalPago2 as '3º Monto'
+SELECT c.NroCliente as 'Nro Cliente', DATE_FORMAT(f.FPVenc, '%d/%m/%Y') as '1º Vto', df.totalPago as '1º Monto', DATE_FORMAT(f.FSVenc, '%d/%m/%Y') as '2º Vto', df.totalPago2 as '2º Monto', DATE_FORMAT(f.FSVenc, '%d/%m/%Y') as '3º Vto', df.totalPago2 as '3º Monto'
 FROM factura as f inner JOIN cliente as c on f.IdCliente=c.IdCliente
-INNER JOIN detallefact as df on f.idFact = df.IdFactura
+INNER JOIN detallefact as df on f.NroFact = df.IdFactura
 
 
 /*-----------------------------------------------------------*/
 
+/*ESTE NO VA!!!*/
 /*Para la importación de padrón de clientes en Siro*/
 SELECT NroCliente as '#numero de cliente o dni (8 digitos)', CONCAT(NombreCli, ' ' , ApellidoCli) AS '#nombre del cliente', '' AS 'descripcion', mailCli as 'correo electronico del cliente', '0' as 'porcentaje de tasa de interes'  FROM `cliente`
+
+/*-----------------------------------------------------------*/
+
+/*ESTE SI VA!!!*/
+/*Para la importación de padrón de clientes en Siro*/
+SELECT NroCliente as 'NroCliente', CONCAT(NombreCli, ' ' , ApellidoCli) AS 'Descripción', '' AS 'Complemento', mailCli as 'Correo electrónico', '' as 'Porcentaje', '' as 'Tipo Adhesión', '' as 'Nro Adhesión'  FROM `cliente`
+
 
