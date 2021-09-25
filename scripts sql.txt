@@ -109,9 +109,25 @@ ALTER TABLE cliente MODIFY NroCliente int(8) zerofill;
 
 
 /*Consulta con todos los datos que necesitamos para el xls que importa NeoFactura*/
-SELECT TP.tipofactdescr AS "Cód tipo de cbte", '1' AS PV, '' AS Número, DATE_FORMAT(F.fechaFactura, "%d/%m/%Y") AS "Fecha de emisión", '1' AS "Cód cond vta", C.NroCliente AS "Código cliente", concat (C.NombreCli, ' ' , C.ApellidoCli) AS "Nombre o razón social", C.IdTipoDoc AS idTipoDocumento, C.DNICli AS "Nro documento", C.CondTrib AS idTipoResponsable, DATE_FORMAT(CURDATE(), "01/%m/%Y") AS "fecha servicios desde", DATE_FORMAT(LAST_DAY(CURDATE()), "%d/%m/%Y") AS "fecha servicios hasta", DATE_FORMAT(CURDATE(), "%d/%m/%Y") AS "fecha vto pago", '1' AS idLista, C.IdTipoFact AS idConcepto, C.IdPlan AS "Cód articulo", S.nombreServ AS "Descripción", S.PlanMegas AS "Descripción adicional",   '1' AS "Cantidad", P.TotalPago AS Precio, '0,00' AS "% dto", '' AS "cód vendedor", C.mailCli AS Email, DATE_FORMAT(F.FSVenc, "%d/%m/%Y") AS "Fecha vto", '' AS "Percepciones", '' AS "Referencia", '' AS "Comprobante relacionado" 
+SELECT TP.tipofactdescr AS 'Cód tipo de cbte', '1' AS PV, '' AS Número, DATE_FORMAT(F.fechaFactura, '%d/%m/%Y') AS 'Fecha de emisión', '1' AS 'Cód cond vta', C.NroCliente AS "Código cliente", concat (C.NombreCli, ' ' , C.ApellidoCli) AS 'Nombre o razón social', C.IdTipoDoc AS idTipoDocumento, C.DNICli AS 'Nro documento', C.CondTrib AS idTipoResponsable, DATE_FORMAT(CURDATE(), "10/%m/%Y") AS 'fecha servicios desde', DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 1 MONTH), '%10/%m/%Y') AS 'fecha servicios hasta', DATE_FORMAT(CURDATE(), '%d/%m/%Y') AS 'fecha vto pago', '1' AS idLista, C.IdTipoFact AS idConcepto, C.IdPlan AS 'Cód articulo', S.nombreServ AS 'Descripción', S.PlanMegas AS 'Descripción adicional',   '1' AS 'Cantidad', P.TotalPago AS Precio, '0,00' AS '% dto', '' AS 'cód vendedor', C.mailCli AS Email, DATE_FORMAT(F.FSVenc, '%d/%m/%Y') AS 'Fecha vto', '' AS 'Percepciones', '' AS 'Referencia', '' AS 'Comprobante relacionado' 
 from cliente AS C
 inner join factura AS F ON C.NroCliente = F.IdCliente
 inner join pago AS P ON F.NroFact = P.IdFact 
 INNER JOIN servicio AS S ON C.IdPlan = S.IdPlan
 inner join TipoFact AS TP ON C.IdTipoFact = TP.IdTipoFact
+/*where FECHA DE PAGO BEETWEN*/
+
+/*-----------------------------------------------------------*/
+
+
+/*Armar tabla Comprobantes de Siro según vencimientos*/
+SELECT c.NroCliente as 'Nro Cliente', DATE_FORMAT(f.FPVenc, "%d/%m/%Y") as '1º Vto', df.totalPago as '1º Monto', DATE_FORMAT(f.FSVenc, "%d/%m/%Y") as '2º Vto', df.totalPago2 as '2º Monto', DATE_FORMAT(f.FSVenc, "%d/%m/%Y") as '3º Vto', df.totalPago2 as '3º Monto'
+FROM factura as f inner JOIN cliente as c on f.IdCliente=c.IdCliente
+INNER JOIN detallefact as df on f.idFact = df.IdFactura
+
+
+/*-----------------------------------------------------------*/
+
+/*Para la importación de padrón de clientes en Siro*/
+SELECT NroCliente as '#numero de cliente o dni (8 digitos)', CONCAT(NombreCli, ' ' , ApellidoCli) AS '#nombre del cliente', '' AS 'descripcion', mailCli as 'correo electronico del cliente', '0' as 'porcentaje de tasa de interes'  FROM `cliente`
+
