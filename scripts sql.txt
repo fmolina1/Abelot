@@ -2,6 +2,8 @@
 /*Agregamos campos nuevos a tabla Cliente*/
 ALTER TABLE cliente ADD COLUMN IdTipoDoc INT DEFAULT (96)
 ALTER TABLE cliente ADD COLUMN IdTipoFact INT DEFAULT (2)
+UPDATE TABLE cliente SET IdTipoFact = 3 WHERE FAfip = 0 
+
 
 /*----------------------------------------------------------*/
 
@@ -102,6 +104,8 @@ ALTER TABLE cliente CHANGE IdTipoResp CondTrib INT;
 
 /*Cambiar longitud del campo número de Cliente a 8 dígitos
 ALTER TABLE cliente MODIFY NroCliente int(8) zerofill;
+ALTER TABLE ncredito MODIFY IdCliente int(8) zerofill;
+ALTER TABLE factura MODIFY IdCliente int(8) zerofill;
 
 
 /*----------------------------------------------------------*/
